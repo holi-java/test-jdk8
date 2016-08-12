@@ -23,10 +23,10 @@ public class CatchMultiExceptionsTest {
   private void assertExceptionMissingCaught(Exception expected) throws Exception {
     try {
       assertExceptionCouldBeCaught(expected);
+      fail(String.format("should %s missing caught!", expected.getClass().getName()));
     } catch (Exception actual) {
-      if (expected == actual) return;
+      if (expected != actual) throw actual;
     }
-    fail(String.format("should %s missing caught!", expected.getClass().getName()));
   }
 
   private void assertExceptionCouldBeCaught(Exception expected) throws Exception {

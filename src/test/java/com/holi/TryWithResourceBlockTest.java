@@ -24,7 +24,7 @@ public class TryWithResourceBlockTest {
     }
   }
 
-  @Test public void closesResourceWhenLeavingTryWithResourcesBlockEvenIfFailsInBlock() throws Throwable {
+  @Test public void closesResourceWhenLeavingTryWithResourcesBlockEvenIfFailsInBlock() throws Exception {
     AtomicBoolean closed = new AtomicBoolean(false);
 
     shouldFail(Exception.class, () -> {
@@ -36,7 +36,7 @@ public class TryWithResourceBlockTest {
     });
   }
 
-  @Test public void throwsExceptionWhenClosingResourceFails() throws Throwable {
+  @Test public void throwsExceptionWhenClosingResourceFails() throws Exception {
     shouldFail(IOException.class, () -> {
       try (Closeable resource = resourceFailsOnClosing()) {
         assertTrue(true);
@@ -50,18 +50,17 @@ public class TryWithResourceBlockTest {
     };
   }
 
-  private void shouldFail(Class<? extends Throwable> thrown, Action action) throws Throwable {
+  private void shouldFail(Class<? extends Exception> expected, Action action) throws Exception {
     try {
       action.run();
-    } catch (Throwable failed) {
-      if (thrown.isInstance(failed)) return;
-      throw failed;
+      fail(format("should failed with %s", expected.getName()));
+    } catch (Exception failed) {
+      if (!expected.isInstance(failed)) throw failed;
     }
-    fail(format("should failed with %s", thrown.getName()));
   }
 
   interface Action {
-    void run() throws Throwable;
+    void run() throws Exception;
   }
 
   private Closeable resourceWillNotifiesWhenClosing(AtomicBoolean closed) {
