@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
  */
 public class TryWithResourceBlockTest {
 
-  @Test public void closesResourceAfterLeavingTryWithResourceBlock() throws Exception {
+  @Test public void closesResourceWhenLeavingTryWithResourceBlock() throws Exception {
     AtomicBoolean closed = new AtomicBoolean(false);
 
     try (Closeable resource = resourceWillNotifiesWhenClosing(closed)) {
@@ -24,7 +24,7 @@ public class TryWithResourceBlockTest {
     }
   }
 
-  @Test public void closesResourceAfterWhenFailsInTryWithResourceBlock() throws Throwable {
+  @Test public void closesResourceWhenLeavingTryWithResourcesBlockEvenIfFailsInBlock() throws Throwable {
     AtomicBoolean closed = new AtomicBoolean(false);
 
     shouldFail(Exception.class, () -> {
